@@ -6,6 +6,7 @@ import com.sapient.amenities.model.Amenity;
 import com.sapient.amenities.model.Booking;
 import com.sapient.amenities.repository.BookingRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -32,6 +33,7 @@ public class BookingService {
                 .orElseThrow(() -> new DataNotFoundException("Booking with id : " + bookingId + "was not found"));
     }
 
+    @Transactional
     public Long saveBooking(Booking booking) throws DataNotFoundException, CapacityFullException {
         Amenity amenity = amenityService.getAmenity(booking.getAmenity().getId());
         Long count = bookingRepository.countByAmenity_IdAndDateIsAndStartTimeAndEndTime(amenity.getId(), booking.getDate(), booking.getStartTime(), booking.getEndTime());
